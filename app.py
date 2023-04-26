@@ -43,7 +43,7 @@ def main():
         # lottie_url_hello = "https://assets5.lottiefiles.com/packages/lf20_7D0uqz.json"
         # lottie_hello = load_lottieurl(lottie_url_hello)
         # st_lottie(lottie_hello, key="hello", height=150, width=150, loop=True)
-    # second column, this is the title
+        # second column, this is the title
     with col2:
         st.title(
             "Análisis del catálogo Hipparcos: Una aproximación a la astrofísica estelar")
@@ -52,8 +52,8 @@ def main():
 
         # st.image(image, caption='',
         #          use_column_width='auto')
-        
-# -----------------------------------------------LECTURA DE DATOS Y PREPROCESAMIENTO------------------------------------#
+
+        # -----------------------------------------------LECTURA DE DATOS Y PREPROCESAMIENTO------------------------------------#
 
     df = pd.read_pickle('data/hipparcos.pkl')
     df_55 = pd.read_pickle('data/variables.pkl')
@@ -80,7 +80,7 @@ def main():
 
 # ---------------------------------------------------------------TABS---------------------------------------------------#
     st.title("")
-    tabs = st.tabs(["",''])
+    tabs = st.tabs(["", ''])
 
     # -------------------------------------------------------TAB 1-----------------------------------------------------#
     tab_plots = tabs[0]  # this is the first tab
@@ -91,17 +91,15 @@ def main():
         cols = st.columns(2)
         with cols[0]:
             st.write("")
-            
 
         with cols[1]:
             st.write("")
-            
 
         cols = st.columns(2)
         with cols[0]:
 
             st.write('...')
-            
+
         with cols[1]:
             st.write("...")
 
@@ -136,14 +134,12 @@ def main():
 
         st.markdown('---')
         st.write('...')
-        
 
         # -------------------------------------------------------TAB 6-----------------------------------------------------#
     tab_plots = tabs[3]  # this is the third tab
     with tab_plots:
 
         st.title('...')
-        
 
         # -------------------------------------------------------TAB 5-----------------------------------------------------#
     tab_plots = tabs[4]  # this is the third tab
