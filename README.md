@@ -16,6 +16,8 @@ Algunos de los análisis realizados incluyen:
 - Análisis de la distribución de temperaturas y luminosidades de las estrellas.
 - Identificación de patrones y agrupaciones de estrellas en el catálogo.
 
+## App de [Streamlit](https://vasallo94-hipparcos-app-m3yxrf.streamlit.app/)
+
 ## Cómo ejecutar el código
 Para ejecutar el código en este proyecto, se recomienda clonar el repositorio y crear un entorno virtual de Python utilizando virtualenv o conda. A continuación, se deben instalar las dependencias listadas en el archivo requirements.txt. Finalmente, los Jupyter Notebooks se pueden ejecutar desde la carpeta notebooks/.
 
