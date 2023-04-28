@@ -23,7 +23,14 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def main():
-    st.markdown("# Hipparcos")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("# Hipparcos")
+
+    with col2:
+        # Agregar imagen local
+        image = Image.open('../img/Hipparcos-testing-estec.jpg')
+        st.image(image, caption='https://upload.wikimedia.org/wikipedia/commons/7/78/Hipparcos-testing-estec.jpg', use_column_width=True)
 
 
 if __name__ == '__main__':

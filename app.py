@@ -52,6 +52,7 @@ def main():
     st.markdown("""---""")
     st.markdown("<center><h2><l style='color:white; font-size: 30px;'>Estudio astronómico de los datos</h2></l></center>", unsafe_allow_html=True)
     st.markdown("""---""")
+    
     # Tabs
     tabs = st.tabs(["Paralaje y movimientos propios",
                     "Clasificación espectral", "La magnitud de las estrellas", "Variabilidad estelar", "Diagrama Herztprung-Russell"])
