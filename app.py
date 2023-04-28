@@ -299,63 +299,41 @@ def main():
     # Tab 4
     with tabs[3]:
         variab = px.histogram(variables, x="Period", nbins=200, log_y=True, template='plotly_dark',
-                   title="Histograma del período estelar en el catálogo Hipparcos")
+                              title="Histograma del período estelar en el catálogo Hipparcos")
 
         # Actualizar el diseño
         variab.update_layout(xaxis_title="Período [Días]", yaxis_title="log(N)",
-            height=600,
-            width=1000)
+                             height=600,
+                             width=1000)
         st.plotly_chart(variab, use_container_width=True)
 
         var_type_counts = variables['HvarType'].value_counts()
-        var_type_counts = var_type_counts.reset_index().rename(columns={'index':'Variability Type', 'HvarType':'Count'})
+        var_type_counts = var_type_counts.reset_index().rename(
+            columns={'index': 'Variability Type', 'HvarType': 'Count'})
         var_type_counts = var_type_counts.sort_values('Count')
 
-        var_type = px.bar(var_type_counts, x='Variability Type', y='Count', color='Variability Type', 
-                    title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos', 
-                    template='plotly_dark')
-        var_type.update_layout(xaxis_title='Tipo de variabilidad', 
-                            yaxis_title='Recuento',
-                            height=600,
-                                width=1000)
+        var_type = px.bar(var_type_counts, x='Variability Type', y='Count', color='Variability Type',
+                          title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos',
+                          template='plotly_dark')
+        var_type.update_layout(xaxis_title='Tipo de variabilidad',
+                               yaxis_title='Recuento',
+                               height=600,
+                               width=1000)
         st.plotly_chart(var_type, use_container_width=True)
 
     # Tab 5
     with tabs[4]:
         st.latex(r'''M = m - 5 \times \log_{10}\left(d_{pc} \right) + 5''')
         st.latex(r'''T = \frac{8540\,\text{K}}{(B-V)+0.865}''')
-
-
-        # Eliminar los datos vacíos de la columna "B-V" directamente en el DataFrame
-        df_parallax.dropna(subset=["B-V"], inplace=True)
-
-        # Convertir columnas numéricas a tipos de datos más pequeños
-        df_parallax["B-V"] = df_parallax["B-V"].astype(np.float32)
-        df_parallax["Vmag"] = df_parallax["Vmag"].astype(np.float32)
-        df_parallax['d'] = df_parallax['d'].astype(np.float32)
-
-        # Calcular la temperatura
-        # df_parallax["T"] = (4600 * (1 / (0.92 * df_parallax["B-V"] + 1.7) + 1 / (1.5 * df_parallax["B-V"] + 0.62))).round(2).astype(int) # Esta fórmula da valores demasiado raros de temperatura como para ser ciertos
-
-        # Cálculo de la temperatura con la fórmula de los apuntes de Astrofísica estelar de la carrera:
-        df_parallax["T"] = 8540 /(df_parallax["B-V"] + 0.865)
-
-        # Calcular la magnitud absoluta
-        df_parallax["M_v"] = (df_parallax["Vmag"] - 5 * np.log10(df_parallax['d'])+5).astype(np.float32)
-        df_parallax["M_Hip"] = (df_parallax["Hpmag"] - 5 * np.log10(df_parallax['d'])+5).astype(np.float32)
-
-        # Ordenar el DataFrame por la variable categórica 'Tipo_espectral'
-        tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
-        df_parallax_sorted = df_parallax.sort_values('Tipo_espectral', key=lambda x: pd.Categorical(x, categories=tipo_espectral_order, ordered=True))
-        
         cols = st.columns(2)
 
         with cols[0]:
-            df_parallax['Tipo_espectral'] = pd.Categorical(df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
+            df_parallax['Tipo_espectral'] = pd.Categorical(
+                df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
 
             # Crear el gráfico HR
-            HR = px.scatter(x=df_parallax['B-V'], 
-                            y=df_parallax['M_v'], 
+            HR = px.scatter(x=df_parallax['B-V'],
+                            y=df_parallax['M_v'],
                             color=df_parallax["Tipo_espectral"])
 
             # Configurar los ejes y la leyenda
@@ -389,7 +367,83 @@ def main():
             st.plotly_chart(HR, use_container_width=True)
 
         with cols[1]:
-            st.write("Aquí va otra visualización")
+
+            # Configurar el gráfico HR3
+            HR2 = px.scatter(x=df_parallax['V-I'],
+                             y=df_parallax['M_Hip'],
+                             color=df_parallax["T"],
+                             color_continuous_scale=px.colors.sequential.RdBu,
+                             labels={'color': 'Temperatura [K]'},
+                             title='Parallax vs. Magnitude')
+
+            # Configurar los ejes y la leyenda
+            HR2.update_layout(
+                xaxis_title="V-I [mag]",
+                yaxis_title=r"M_{Hip}\,[mag]",
+                yaxis=dict(autorange='reversed'),
+                height=900,
+                width=900,
+                legend=dict(
+                    traceorder="normal",
+                    title="Clase espectral",
+                    itemsizing='constant'
+                )
+            )
+
+            # Configurar los marcadores
+            HR2.update_traces(
+                mode='markers',
+                marker=dict(size=2)
+            )
+
+            HR2.update_traces(hovertemplate='<br>'.join([
+                'V-I: %{x:.2f}',
+                'M: %{y:.2f}']
+            ))
+
+            # Limitar el rango del eje x
+            HR2.update_xaxes(range=[-1.5, 6])
+
+            # Mostrar el gráfico
+            st.plotly_chart(HR2, use_container_width=True)
+
+        # Crear el gráfico HR3D
+        HR3D = px.scatter_3d(x=df_parallax['V-I'],
+                             y=df_parallax['M_Hip'],
+                             z=df_parallax['T'],
+                             color=df_parallax["Tipo_espectral"])
+
+        # Configurar los ejes y la leyenda
+        HR3D.update_layout(
+            scene=dict(
+                xaxis_title="Índice V-I",
+                yaxis_title="Magnitud absoluta",
+                zaxis_title="Temperatura",
+            ),
+            xaxis=dict(autorange='reversed'),
+            yaxis=dict(autorange='reversed'),
+            height=900,
+            width=900,
+            legend=dict(
+                traceorder="normal",
+                title="Tipo espectral",
+                itemsizing='constant'
+            )
+        )
+
+        HR3D.update_traces(hovertemplate='<br>'.join([
+            'V-I: %{x:.2f}',
+            'M: %{y:.2f}',
+            'T: %{z:.2f} K',
+        ]))
+        # Configurar los marcadores
+        HR3D.update_traces(
+            mode='markers',
+            marker=dict(size=1.5)
+        )
+        st.plotly_chart(HR3D, use_container_width=True)
+
+        # Mostrar el gráfico
 
 
 if __name__ == '__main__':
