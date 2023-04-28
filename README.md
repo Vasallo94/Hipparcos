@@ -1,7 +1,7 @@
 # Análisis del catálogo astronómico Hipparcos
 Este es un proyecto que busca analizar el catálogo astronómico Hipparcos, que contiene información detallada sobre las estrellas de nuestra galaxia. El objetivo es utilizar técnicas de análisis de datos para extraer información útil sobre la distribución y características de las estrellas en nuestra galaxia.
 
-##Estructura del proyecto
+## Estructura del proyecto
 El proyecto está organizado de la siguiente manera:
 
 - data/: Carpeta que contiene los archivos de datos del catálogo Hipparcos.
