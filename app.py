@@ -299,28 +299,23 @@ def main():
     # Tab 4
     with tabs[3]:
         variab = px.histogram(variables, x="Period", nbins=200, log_y=True, template='plotly_dark',
-                              title="Histograma del período estelar en el catálogo Hipparcos")
+                            title="Histograma del período estelar en el catálogo Hipparcos")
 
         # Actualizar el diseño
         variab.update_layout(xaxis_title="Período [Días]", yaxis_title="log(N)",
-                             height=600,
-                             width=1000)
+                            height=600,
+                            width=1000)
         st.plotly_chart(variab, use_container_width=True)
 
-        var_type_counts = variables['HvarType'].value_counts()
-        var_type_counts = var_type_counts.reset_index().rename(
-            columns={'index': 'Variability Type', 'HvarType': 'Count'})
-        var_type_counts = var_type_counts.sort_values('Count')
-
-        var_type = px.bar(x=var_type_counts['Variability Type'], y=var_type_counts['Count'], color='Variability Type',
-                          title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos',
-                          template='plotly_dark')
+        var_type = px.bar(variables, x='HvarType', color='HvarType',
+                        title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos',
+                        template='plotly_dark')
         var_type.update_layout(xaxis_title='Tipo de variabilidad',
-                               yaxis_title='Recuento',
-                               height=600,
-                               width=1000)
+                            yaxis_title='Recuento',
+                            height=600,
+                            width=1000)
         st.plotly_chart(var_type, use_container_width=True)
-        del var_type_counts
+
 
     # Tab 5
     with tabs[4]:
