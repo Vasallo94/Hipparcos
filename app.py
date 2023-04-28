@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 import plotly_express as px
+import plotly.figure_factory as ff
 import streamlit as st
 from streamlit_lottie import st_lottie
-import requests
 from sys import path
 import os
 path.append(os.path.abspath(os.path.join('..')))
@@ -54,7 +54,7 @@ def main():
     st.markdown("""---""")
     # Tabs
     tabs = st.tabs(["Paralaje y movimientos propios",
-                    "Clasificación espectral", "La magnitud de las estrellas", "Tab 4", "Tab 5"])
+                    "Clasificación espectral", "La magnitud de las estrellas", "Variabilidad estelar", "Diagrama Herztprung-Russell"])
 
     # Tab 1
     with tabs[0]:
@@ -175,11 +175,6 @@ def main():
         cols = st.columns(2)
 
         with cols[0]:
-            # # Select only necessary columns from the dataframe
-            # data = visible[['RAdeg', 'DEdeg', 'Vmag', 'd']]
-
-            # # Reduce the precision of the coordinates to save memory
-            # data[['RAdeg', 'DEdeg']] = data[['RAdeg', 'DEdeg']].round(2)
 
             # Create scatter plot with custom data and defined template
             osa = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag', range_x=[220, 140], range_y=[40, 70],
@@ -187,7 +182,7 @@ def main():
                              labels={
                                  'x': 'Ascensión recta [°]', 'y': 'Declinación [°]'},
                              title='Constelación de la Osa Mayor')
-
+            osa.update_layout(height=600, width=800)
             # Add hover template
             osa.update_traces(hovertemplate='<br>'.join([
                 'RA: %{x:.2f}',
@@ -196,24 +191,17 @@ def main():
                 'Magnitud visual: %{customdata[1]:.2f}',
             ]))
 
-            # Update layout
-            osa.update_layout(title_x=0.5, height=600, width=800)
-
             # Show plot
             st.plotly_chart(osa, use_container_width=True)
 
         with cols[1]:
-
             # Create scatter plot with custom data
             orion = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag',
                                range_x=[120, 40], range_y=[-20, 22], color_continuous_scale='Greys',
                                opacity=1, labels={'RAdeg': 'Ascensión recta [°]', 'DEdeg': 'Declinación [°]'},
                                title='Constelación de Orión',
                                custom_data=['d', 'Vmag'])
-
-            # Update layout
-            orion.update_layout(template='plotly_dark',
-                                title_x=0.5, height=600, width=800)
+            orion.update_layout(height=600, width=800)
 
             # Add hover template
             orion.update_traces(hovertemplate='<br>'.join([
@@ -222,31 +210,183 @@ def main():
                 'Distancia: %{customdata[0]:.2f} pc',
                 'Magnitud visual: %{customdata[1]:.2f}',
             ]))
-
             # Show plot
             st.plotly_chart(orion, use_container_width=True)
             del visible
 
-    # Tab 4
-    with tabs[3]:
-        st.title('Visualización 4')
+        mag = px.histogram(df_parallax, x="Vmag", nbins=100)
+        mag.update_layout(
+            xaxis_title="Magnitud visual aparente",
+            yaxis_title="Recuento",
+            title="Distribución de estrellas según su magnitud aparente",
+            height=600,
+            width=1000,)
+        st.plotly_chart(mag, use_container_width=True)
+
+        tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
+
+        # Ordenar el DataFrame por la variable categórica 'Tipo_espectral'
+        df_parallax_sorted = df_parallax.sort_values('Tipo_espectral', key=lambda x: pd.Categorical(
+            x, categories=tipo_espectral_order, ordered=True))
+        # Crear la figura
+        dist_type = px.histogram(df_parallax_sorted, x="Vmag", color="Tipo_espectral", nbins=100,
+                                 title='Distribución de las magnitudes visuales con base en el tipo espectral de las estrellas')
+
+        # Actualizar el orden de la leyenda y los títulos de los ejes
+        dist_type.update_layout(
+            legend=dict(
+                traceorder="normal",
+                title="Tipo espectral",
+                itemsizing='constant'
+            ),
+            xaxis=dict(
+                title="Magnitud visual aparente"
+            ),
+            yaxis=dict(
+                title="Recuento"
+            ),
+            height=600,
+            width=1000
+        )
+
+        # Mostrar la figura
+        st.plotly_chart(dist_type, use_container_width=True)
+
+        df_parallax.reset_index(drop=True, inplace=True)
 
         cols = st.columns(2)
 
         with cols[0]:
-            st.write("Aquí va una visualización")
+            hist_data = [df_parallax["BTmag"],
+                         df_parallax["VTmag"], df_parallax["Hpmag"]]
+
+            group_labels = ['Magnitud BT aparente',
+                            'Magnitud VT aparente', 'Magnitud HP aparente']
+
+            # Crear el distplot con el tamaño personalizado de los bins
+            magnitudes = ff.create_distplot(
+                hist_data, group_labels, bin_size=0.2)
+
+            # Actualizar el diseño
+            magnitudes.update_layout(
+                title='Distribución de magnitudes en el catálogo Hipparcos',
+                xaxis_title='Magnitud aparente',
+                yaxis_title='Densidad',
+                height=600,
+                width=1000)
+
+            # Mostrar el gráfico
+            st.plotly_chart(magnitudes, use_container_width=True)
 
         with cols[1]:
-            st.write("Aquí va otra visualización")
+            # Crear el histograma con distribución acumulada
+            cumulative = px.histogram(df_parallax, x="Vmag", nbins=50, cumulative=True,
+                                      title="Distribución de la magnitud visual aparente (Acumulativo)",
+                                      labels={'Vmag': 'Magnitud aparente visual'})
+
+            # Cambiar el título y los nombres de los ejes a español
+            cumulative.update_layout(
+                xaxis_title='Magnitud aparente V', yaxis_title='Recuento')
+            cumulative.update_traces(
+                hovertemplate="Magnitud aparente visual: %{x}")
+            cumulative.update_layout(
+                height=600,
+                width=1000,
+                template="plotly_dark")
+
+            # Mostrar el gráfico
+            st.plotly_chart(cumulative, use_container_width=True)
+    # Tab 4
+    with tabs[3]:
+        variab = px.histogram(variables, x="Period", nbins=200, log_y=True, template='plotly_dark',
+                   title="Histograma del período estelar en el catálogo Hipparcos")
+
+        # Actualizar el diseño
+        variab.update_layout(xaxis_title="Período [Días]", yaxis_title="log(N)",
+            height=600,
+            width=1000)
+        st.plotly_chart(variab, use_container_width=True)
+
+        var_type_counts = variables['HvarType'].value_counts()
+        var_type_counts = var_type_counts.reset_index().rename(columns={'index':'Variability Type', 'HvarType':'Count'})
+        var_type_counts = var_type_counts.sort_values('Count')
+
+        var_type = px.bar(var_type_counts, x='Variability Type', y='Count', color='Variability Type', 
+                    title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos', 
+                    template='plotly_dark')
+        var_type.update_layout(xaxis_title='Tipo de variabilidad', 
+                            yaxis_title='Recuento',
+                            height=600,
+                                width=1000)
+        st.plotly_chart(var_type, use_container_width=True)
 
     # Tab 5
     with tabs[4]:
-        st.title('Visualización 5')
+        st.latex(r'''M = m - 5 \times \log_{10}\left(d_{pc} \right) + 5''')
+        st.latex(r'''T = \frac{8540\,\text{K}}{(B-V)+0.865}''')
 
+
+        # Eliminar los datos vacíos de la columna "B-V" directamente en el DataFrame
+        df_parallax.dropna(subset=["B-V"], inplace=True)
+
+        # Convertir columnas numéricas a tipos de datos más pequeños
+        df_parallax["B-V"] = df_parallax["B-V"].astype(np.float32)
+        df_parallax["Vmag"] = df_parallax["Vmag"].astype(np.float32)
+        df_parallax['d'] = df_parallax['d'].astype(np.float32)
+
+        # Calcular la temperatura
+        # df_parallax["T"] = (4600 * (1 / (0.92 * df_parallax["B-V"] + 1.7) + 1 / (1.5 * df_parallax["B-V"] + 0.62))).round(2).astype(int) # Esta fórmula da valores demasiado raros de temperatura como para ser ciertos
+
+        # Cálculo de la temperatura con la fórmula de los apuntes de Astrofísica estelar de la carrera:
+        df_parallax["T"] = 8540 /(df_parallax["B-V"] + 0.865)
+
+        # Calcular la magnitud absoluta
+        df_parallax["M_v"] = (df_parallax["Vmag"] - 5 * np.log10(df_parallax['d'])+5).astype(np.float32)
+        df_parallax["M_Hip"] = (df_parallax["Hpmag"] - 5 * np.log10(df_parallax['d'])+5).astype(np.float32)
+
+        # Ordenar el DataFrame por la variable categórica 'Tipo_espectral'
+        tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
+        df_parallax_sorted = df_parallax.sort_values('Tipo_espectral', key=lambda x: pd.Categorical(x, categories=tipo_espectral_order, ordered=True))
+        
         cols = st.columns(2)
 
         with cols[0]:
-            st.write("Aquí va una visualización")
+            df_parallax['Tipo_espectral'] = pd.Categorical(df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
+
+            # Crear el gráfico HR
+            HR = px.scatter(x=df_parallax['B-V'], 
+                            y=df_parallax['M_v'], 
+                            color=df_parallax["Tipo_espectral"])
+
+            # Configurar los ejes y la leyenda
+            HR.update_layout(
+                xaxis_title="B-V [mag]",
+                yaxis_title="M_v [mag]",
+                yaxis=dict(autorange='reversed'),
+                height=900,
+                width=900,
+                legend=dict(
+                    traceorder="normal",
+                    title="Tipo espectral",
+                    itemsizing='constant'
+                ),
+                title="Diagrama HR"
+            )
+
+            # Add hover template
+            HR.update_traces(hovertemplate='<br>'.join([
+                'B-V: %{x:.2f}',
+                'Magnitud absoluta: %{y:.2f}'
+            ]))
+
+            # Configurar los marcadores
+            HR.update_traces(
+                mode='markers',
+                marker=dict(size=1.5)
+            )
+
+            # Mostrar el gráfico
+            st.plotly_chart(HR, use_container_width=True)
 
         with cols[1]:
             st.write("Aquí va otra visualización")
