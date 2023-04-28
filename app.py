@@ -312,7 +312,7 @@ def main():
             columns={'index': 'Variability Type', 'HvarType': 'Count'})
         var_type_counts = var_type_counts.sort_values('Count')
 
-        var_type = px.bar(var_type_counts, x='Variability Type', y='Count', color='Variability Type',
+        var_type = px.bar(x=var_type_counts['Variability Type'], y=var_type_counts['Count'], color='Variability Type',
                           title='Distribución del tipo de variabilidad estelar en el catálogo Hipparcos',
                           template='plotly_dark')
         var_type.update_layout(xaxis_title='Tipo de variabilidad',
@@ -320,6 +320,7 @@ def main():
                                height=600,
                                width=1000)
         st.plotly_chart(var_type, use_container_width=True)
+        del var_type_counts
 
     # Tab 5
     with tabs[4]:
