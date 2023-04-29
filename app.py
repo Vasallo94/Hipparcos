@@ -52,7 +52,7 @@ def main():
     st.markdown("""---""")
     st.markdown("<center><h2><l style='color:white; font-size: 30px;'>Estudio astronómico de los datos</h2></l></center>", unsafe_allow_html=True)
     st.markdown("""---""")
-    
+
     # Tabs
     tabs = st.tabs(["Paralaje y movimientos propios",
                     "Clasificación espectral", "La magnitud de las estrellas", "Variabilidad estelar", "Diagrama Herztprung-Russell"])
@@ -370,7 +370,7 @@ def main():
                              color=df_parallax["T"],
                              color_continuous_scale=px.colors.sequential.RdBu,
                              labels={'color': 'Temperatura [K]'},
-                             title='Parallax vs. Magnitude')
+                             title='HR Temperatura')
 
             # Configurar los ejes y la leyenda
             HR2.update_layout(
@@ -403,43 +403,45 @@ def main():
             # Mostrar el gráfico
             st.plotly_chart(HR2, use_container_width=True)
 
-        # Crear el gráfico HR3D
-        HR3D = px.scatter_3d(x=df_parallax['V-I'],
-                             y=df_parallax['M_Hip'],
-                             z=df_parallax['T'],
-                             color=df_parallax["Tipo_espectral"])
+        col1, col2 = st.columns(2)
+        with cols[0]:
+            # Crear el gráfico HR3D
+            HR3D = px.scatter_3d(x=df_parallax['V-I'],
+                                 y=df_parallax['M_Hip'],
+                                 z=df_parallax['T'],
+                                 color=df_parallax["Tipo_espectral"])
 
-        # Configurar los ejes y la leyenda
-        HR3D.update_layout(
-            scene=dict(
-                xaxis_title="Índice V-I",
-                yaxis_title="Magnitud absoluta",
-                zaxis_title="Temperatura",
-            ),
-            xaxis=dict(autorange='reversed'),
-            yaxis=dict(autorange='reversed'),
-            height=900,
-            width=900,
-            legend=dict(
-                traceorder="normal",
-                title="Tipo espectral",
-                itemsizing='constant'
+            # Configurar los ejes y la leyenda
+            HR3D.update_layout(
+                scene=dict(
+                    xaxis_title="Índice V-I",
+                    yaxis_title="Magnitud absoluta",
+                    zaxis_title="Temperatura",
+                ),
+                xaxis=dict(autorange='reversed'),
+                yaxis=dict(autorange='reversed'),
+                height=900,
+                width=900,
+                legend=dict(
+                    traceorder="normal",
+                    title="Tipo espectral",
+                    itemsizing='constant'
+                )
             )
-        )
 
-        HR3D.update_traces(hovertemplate='<br>'.join([
-            'V-I: %{x:.2f}',
-            'M: %{y:.2f}',
-            'T: %{z:.2f} K',
-        ]))
-        # Configurar los marcadores
-        HR3D.update_traces(
-            mode='markers',
-            marker=dict(size=1.5)
-        )
-        st.plotly_chart(HR3D, use_container_width=True)
-
-        # Mostrar el gráfico
+            HR3D.update_traces(hovertemplate='<br>'.join([
+                'V-I: %{x:.2f}',
+                'M: %{y:.2f}',
+                'T: %{z:.2f} K',
+            ]))
+            # Configurar los marcadores
+            HR3D.update_traces(
+                mode='markers',
+                marker=dict(size=1.5)
+            )
+            st.plotly_chart(HR3D, use_container_width=True)
+        with cols[1]:
+            st.image('img/HR.jpeg', width=900)
 
 
 if __name__ == '__main__':
