@@ -12,7 +12,7 @@ from streamlit_lottie import st_lottie
 from sys import path
 from PIL import Image
 import os
-path.append(os.path.abspath(os.path.join('..')))
+path.append(os.path.abspath(os.path.join('../')))
 pio.templates.default = "plotly_dark"
 
 
@@ -31,7 +31,10 @@ def main():
         st.markdown("Durante su misión, el satélite Hipparcos utilizó un telescopio especializado para medir la posición de las estrellas con una precisión nunca antes alcanzad (ahora ampliamente superada por la misión Gaia). Además, utilizó técnicas de paralaje para medir la distancia de las estrellas a la Tierra, lo que permitió construir un mapa tridimensional de la galaxia.")
         st.markdown("El resultado de la misión fue la creación del Catálogo Hipparcos, que contiene información detallada sobre la posición, el movimiento y la distancia de más de 100,000 estrellas con una precisión sin precedentes. El catálogo también incluye información sobre la luminosidad y la temperatura de las estrellas, lo que permite a los astrónomos estudiar la evolución y la estructura de nuestra galaxia.")
         st.markdown("El Catálogo Hipparcos ha sido ampliamente utilizado por la comunidad científica en una variedad de campos, desde la astrofísica hasta la cosmología, y ha sido fundamental para nuestra comprensión del universo y nuestro lugar en él.")
-
+        st.markdown("---")
+        st.markdown("## Datos")
+        df = pd.read_parquet('data/hipparcos_final.parquet')
+        st.dataframe(df)
     with col2:
         # Mostrar la imagen
         img_url = "https://upload.wikimedia.org/wikipedia/commons/7/78/Hipparcos-testing-estec.jpg"
