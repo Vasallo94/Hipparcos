@@ -48,8 +48,8 @@ def main():
         lottie_url_hello = "https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json"
         lottie_hello = load_lottieurl(lottie_url_hello)
         st_lottie(lottie_hello, key="hello", loop=True)
-        # link_url = "https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json"
-        st.image(lottie_url_hello, use_column_width=True)
+        # Mostrar el enlace
+        st.markdown(lottie_url_hello, unsafe_allow_html=True)
 
     st.markdown("""---""")
     st.markdown("<center><h2><l style='color:white; font-size: 30px;'>Estudio astronómico de los datos</h2></l></center>", unsafe_allow_html=True)
