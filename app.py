@@ -178,46 +178,84 @@ def main():
 
         cols = st.columns(2)
 
-        with cols[0]:
-            @st.cache
-            # Create scatter plot with custom data and defined template
-            osa = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag', range_x=[220, 140], range_y=[40, 70],
-                             color_continuous_scale='Greys', opacity=1, custom_data=['d', 'Vmag'],
-                             labels={
-                'x': 'Ascensión recta [°]', 'y': 'Declinación [°]'},
-                title='Constelación de la Osa Mayor')
-            osa.update_layout(height=600, width=800)
-            # Add hover template
-            osa.update_traces(hovertemplate='<br>'.join([
-                'RA: %{x:.2f}',
-                'Dec: %{y:.2f}',
-                'Distancia: %{customdata[0]:.2f} pc',
-                'Magnitud visual: %{customdata[1]:.2f}',
-            ]))
+        @st.cache_data()
+        def custom_scatter(data, x, y, color, range_x, range_y, color_continuous_scale, opacity, labels, title, custom_data, hovertemplate):
+            scatter = px.scatter(data, x=x, y=y, color=color, range_x=range_x, range_y=range_y,
+                                 color_continuous_scale=color_continuous_scale, opacity=opacity, labels=labels,
+                                 title=title, custom_data=custom_data)
+            scatter.update_layout(height=600, width=800)
+            scatter.update_traces(hovertemplate=hovertemplate)
+            return scatter
 
-            # Show plot
+        with cols[0]:
+            osa = custom_scatter(visible, 'RAdeg', 'DEdeg', 'Vmag', [220, 140], [40, 70], 'Greys', 1,
+                                 {'RAdeg': 'Ascensión recta [°]',
+                                     'DEdeg': 'Declinación [°]'},
+                                 'Constelación de la Osa Mayor', ['d', 'Vmag'],
+                                 '<br>'.join([
+                                     'RA: %{x:.2f}',
+                                     'Dec: %{y:.2f}',
+                                     'Distancia: %{customdata[0]:.2f} pc',
+                                     'Magnitud visual: %{customdata[1]:.2f}',
+                                 ]))
             st.plotly_chart(osa, use_container_width=True)
 
         with cols[1]:
-            @st.cache
-            # Create scatter plot with custom data
-            orion = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag',
-                               range_x=[120, 40], range_y=[-20, 22], color_continuous_scale='Greys',
-                               opacity=1, labels={'RAdeg': 'Ascensión recta [°]', 'DEdeg': 'Declinación [°]'},
-                               title='Constelación de Orión',
-                               custom_data=['d', 'Vmag'])
-            orion.update_layout(height=600, width=800)
-
-            # Add hover template
-            orion.update_traces(hovertemplate='<br>'.join([
-                'RA: %{x:.2f}',
-                'Dec: %{y:.2f}',
-                'Distancia: %{customdata[0]:.2f} pc',
-                'Magnitud visual: %{customdata[1]:.2f}',
-            ]))
-            # Show plot
+            orion = custom_scatter(visible, 'RAdeg', 'DEdeg', 'Vmag', [120, 40], [-20, 22], 'Greys', 1,
+                                   {'RAdeg': 'Ascensión recta [°]',
+                                       'DEdeg': 'Declinación [°]'},
+                                   'Constelación de Orión', ['d', 'Vmag'],
+                                   '<br>'.join([
+                                       'RA: %{x:.2f}',
+                                       'Dec: %{y:.2f}',
+                                       'Distancia: %{customdata[0]:.2f} pc',
+                                       'Magnitud visual: %{customdata[1]:.2f}',
+                                   ]))
             st.plotly_chart(orion, use_container_width=True)
             del visible
+            
+        # ESTE ES EL CÓDIGO DE ARRIBA PERO SIN SER FUNCIÓN Y SIN EL DECORADOR @ST.CACHE_DATA
+
+        # with cols[0]:
+
+        #     # Create scatter plot with custom data and defined template
+        #     osa = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag', range_x=[220, 140], range_y=[40, 70],
+        #                      color_continuous_scale='Greys', opacity=1, custom_data=['d', 'Vmag'],
+        #                      labels={
+        #         'x': 'Ascensión recta [°]', 'y': 'Declinación [°]'},
+        #         title='Constelación de la Osa Mayor')
+        #     osa.update_layout(height=600, width=800)
+        #     # Add hover template
+        #     osa.update_traces(hovertemplate='<br>'.join([
+        #         'RA: %{x:.2f}',
+        #         'Dec: %{y:.2f}',
+        #         'Distancia: %{customdata[0]:.2f} pc',
+        #         'Magnitud visual: %{customdata[1]:.2f}',
+        #     ]))
+
+        #     # Show plot
+        #     st.plotly_chart(osa, use_container_width=True)
+
+        # with cols[1]:
+
+        #     # Create scatter plot with custom data
+        #     orion = px.scatter(visible, x='RAdeg', y='DEdeg', color='Vmag',
+        #                        range_x=[120, 40], range_y=[-20, 22], color_continuous_scale='Greys',
+        #                        opacity=1, labels={'RAdeg': 'Ascensión recta [°]', 'DEdeg': 'Declinación [°]'},
+        #                        title='Constelación de Orión',
+        # #                        custom_data=['d', 'Vmag'])
+        # #     orion.update_layout(height=600, width=800)
+
+        #     # Add hover template
+        #     orion.update_traces(hovertemplate='<br>'.join([
+        #         'RA: %{x:.2f}',
+        #         'Dec: %{y:.2f}',
+        #         'Distancia: %{customdata[0]:.2f} pc',
+        #         'Magnitud visual: %{customdata[1]:.2f}',
+        #     ]))
+        #     # Show plot
+        #     st.plotly_chart(orion, use_container_width=True)
+        #     del visible
 
         mag = px.histogram(df_parallax, x="Vmag", nbins=100)
         mag.update_layout(
@@ -328,124 +366,252 @@ def main():
         cols = st.columns(2)
 
         with cols[0]:
-            df_parallax['Tipo_espectral'] = pd.Categorical(
-                df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
+            # Definir las funciones para generar los gráficos
+            @st.cache_data()
+            def generar_HR(df_parallax):
+                df_parallax['Tipo_espectral'] = pd.Categorical(
+                    df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
 
-            # Crear el gráfico HR
-            HR = px.scatter(x=df_parallax['B-V'],
-                            y=df_parallax['M_v'],
-                            color=df_parallax["Tipo_espectral"])
+                # Crear el gráfico HR
+                HR = px.scatter(x=df_parallax['B-V'],
+                                y=df_parallax['M_v'],
+                                color=df_parallax["Tipo_espectral"])
 
-            # Configurar los ejes y la leyenda
-            HR.update_layout(
-                xaxis_title="B-V [mag]",
-                yaxis_title="M_v [mag]",
-                yaxis=dict(autorange='reversed'),
-                height=900,
-                width=900,
-                legend=dict(
-                    traceorder="normal",
-                    title="Tipo espectral",
-                    itemsizing='constant'
-                ),
-                title="Diagrama HR"
-            )
-
-            # Add hover template
-            HR.update_traces(hovertemplate='<br>'.join([
-                'B-V: %{x:.2f}',
-                'Magnitud absoluta: %{y:.2f}'
-            ]))
-
-            # Configurar los marcadores
-            HR.update_traces(
-                mode='markers',
-                marker=dict(size=1.5)
-            )
-
-            # Mostrar el gráfico
-            st.plotly_chart(HR, use_container_width=True)
-
-        with cols[1]:
-
-            # Configurar el gráfico HR3
-            HR2 = px.scatter(x=df_parallax['V-I'],
-                             y=df_parallax['M_Hip'],
-                             color=df_parallax["T"],
-                             color_continuous_scale=px.colors.sequential.RdBu,
-                             labels={'color': 'Temperatura [K]'},
-                             title='HR Temperatura')
-
-            # Configurar los ejes y la leyenda
-            HR2.update_layout(
-                xaxis_title="V-I [mag]",
-                yaxis_title=r"M_{Hip}\,[mag]",
-                yaxis=dict(autorange='reversed'),
-                height=900,
-                width=900,
-                legend=dict(
-                    traceorder="normal",
-                    title="Clase espectral",
-                    itemsizing='constant'
+                # Configurar los ejes y la leyenda
+                HR.update_layout(
+                    xaxis_title="B-V [mag]",
+                    yaxis_title="M_v [mag]",
+                    yaxis=dict(autorange='reversed'),
+                    height=900,
+                    width=900,
+                    legend=dict(
+                        traceorder="normal",
+                        title="Tipo espectral",
+                        itemsizing='constant'
+                    ),
+                    title="Diagrama HR"
                 )
-            )
 
-            # Configurar los marcadores
-            HR2.update_traces(
-                mode='markers',
-                marker=dict(size=2)
-            )
+                # Add hover template
+                HR.update_traces(hovertemplate='<br>'.join([
+                    'B-V: %{x:.2f}',
+                    'Magnitud absoluta: %{y:.2f}'
+                ]))
 
-            HR2.update_traces(hovertemplate='<br>'.join([
-                'V-I: %{x:.2f}',
-                'M: %{y:.2f}']
-            ))
+                # Configurar los marcadores
+                HR.update_traces(
+                    mode='markers',
+                    marker=dict(size=1.5)
+                )
 
-            # Limitar el rango del eje x
-            HR2.update_xaxes(range=[-1.5, 6])
+                return HR
+            st.plotly_chart(generar_HR(df_parallax), use_container_width=True)
+        with cols[1]:
+            @st.cache_data()
+            def generar_HR2(df_parallax):
+                # Configurar el gráfico HR2
+                HR2 = px.scatter(x=df_parallax['V-I'],
+                                 y=df_parallax['M_Hip'],
+                                 color=df_parallax["T"],
+                                 color_continuous_scale=px.colors.sequential.RdBu,
+                                 labels={'color': 'Temperatura [K]'},
+                                 title='HR Temperatura')
 
-            # Mostrar el gráfico
-            st.plotly_chart(HR2, use_container_width=True)
+                # Configurar los ejes y la leyenda
+                HR2.update_layout(
+                    xaxis_title="V-I [mag]",
+                    yaxis_title=r"M_{Hip}\,[mag]",
+                    yaxis=dict(autorange='reversed'),
+                    height=900,
+                    width=900,
+                    legend=dict(
+                        traceorder="normal",
+                        title="Clase espectral",
+                        itemsizing='constant'
+                    )
+                )
 
+                # Configurar los marcadores
+                HR2.update_traces(
+                    mode='markers',
+                    marker=dict(size=2)
+                )
+
+                HR2.update_traces(hovertemplate='<br>'.join([
+                    'V-I: %{x:.2f}',
+                    'M: %{y:.2f}']
+                ))
+
+                # Limitar el rango del eje x
+                HR2.update_xaxes(range=[-1.5, 6])
+
+                return HR2
+            st.plotly_chart(generar_HR2(df_parallax), use_container_width=True)
         col1, col2 = st.columns(2)
         with cols[0]:
-            # Crear el gráfico HR3D
-            HR3D = px.scatter_3d(x=df_parallax['V-I'],
-                                 y=df_parallax['M_Hip'],
-                                 z=df_parallax['T'],
-                                 color=df_parallax["Tipo_espectral"])
+            @st.cache_data()
+            def generar_HR3D(df_parallax):
+                # Crear el gráfico HR3D
+                HR3D = px.scatter_3d(x=df_parallax['V-I'],
+                                     y=df_parallax['M_Hip'],
+                                     z=df_parallax['T'],
+                                     color=df_parallax["Tipo_espectral"])
 
-            # Configurar los ejes y la leyenda
-            HR3D.update_layout(
-                scene=dict(
-                    xaxis_title="Índice V-I",
-                    yaxis_title="Magnitud absoluta",
-                    zaxis_title="Temperatura",
-                ),
-                xaxis=dict(autorange='reversed'),
-                yaxis=dict(autorange='reversed'),
-                height=900,
-                width=900,
-                legend=dict(
-                    traceorder="normal",
-                    title="Tipo espectral",
-                    itemsizing='constant'
+                # Configurar los ejes y la leyenda
+                HR3D.update_layout(
+                    scene=dict(
+                        xaxis_title="Índice V-I",
+                        yaxis_title="Magnitud absoluta",
+                        zaxis_title="Temperatura",
+                    ),
+                    xaxis=dict(autorange='reversed'),
+                    yaxis=dict(autorange='reversed'),
+                    height=900,
+                    width=900,
+                    legend=dict(
+                        traceorder="normal",
+                        title="Tipo espectral",
+                        itemsizing='constant'
+                    ),
+                    title="Diagrama HR 3D"
                 )
-            )
 
-            HR3D.update_traces(hovertemplate='<br>'.join([
-                'V-I: %{x:.2f}',
-                'M: %{y:.2f}',
-                'T: %{z:.2f} K',
-            ]))
-            # Configurar los marcadores
-            HR3D.update_traces(
-                mode='markers',
-                marker=dict(size=1.5)
-            )
-            st.plotly_chart(HR3D, use_container_width=True)
+                # Add hover template
+                HR3D.update_traces(hovertemplate='<br>'.join([
+                    'V-I: %{x:.2f}',
+                    'Magnitud absoluta: %{y:.2f}',
+                    'Temperatura: %{z:.2f} K'
+                ]))
+
+                # Configurar los marcadores
+                HR3D.update_traces(
+                    mode='markers',
+                    marker=dict(size=1.5)
+                )
+
+                return HR3D
+            st.plotly_chart(generar_HR3D(df_parallax),
+                            use_container_width=True)
         with cols[1]:
             st.image('img/HR.jpeg', width=900)
+        #     df_parallax['Tipo_espectral'] = pd.Categorical(
+        #         df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
+
+        #     # Crear el gráfico HR
+        #     HR = px.scatter(x=df_parallax['B-V'],
+        #                     y=df_parallax['M_v'],
+        #                     color=df_parallax["Tipo_espectral"])
+
+        #     # Configurar los ejes y la leyenda
+        #     HR.update_layout(
+        #         xaxis_title="B-V [mag]",
+        #         yaxis_title="M_v [mag]",
+        #         yaxis=dict(autorange='reversed'),
+        #         height=900,
+        #         width=900,
+        #         legend=dict(
+        #             traceorder="normal",
+        #             title="Tipo espectral",
+        #             itemsizing='constant'
+        #         ),
+        #         title="Diagrama HR"
+        #     )
+
+        #     # Add hover template
+        #     HR.update_traces(hovertemplate='<br>'.join([
+        #         'B-V: %{x:.2f}',
+        #         'Magnitud absoluta: %{y:.2f}'
+        #     ]))
+
+        #     # Configurar los marcadores
+        #     HR.update_traces(
+        #         mode='markers',
+        #         marker=dict(size=1.5)
+        #     )
+
+        #     # Mostrar el gráfico
+        #     st.plotly_chart(HR, use_container_width=True)
+
+        # with cols[1]:
+
+        #     # Configurar el gráfico HR3
+        #     HR2 = px.scatter(x=df_parallax['V-I'],
+        #                      y=df_parallax['M_Hip'],
+        #                      color=df_parallax["T"],
+        #                      color_continuous_scale=px.colors.sequential.RdBu,
+        #                      labels={'color': 'Temperatura [K]'},
+        #                      title='HR Temperatura')
+
+        #     # Configurar los ejes y la leyenda
+        #     HR2.update_layout(
+        #         xaxis_title="V-I [mag]",
+        #         yaxis_title=r"M_{Hip}\,[mag]",
+        #         yaxis=dict(autorange='reversed'),
+        #         height=900,
+        #         width=900,
+        #         legend=dict(
+        #             traceorder="normal",
+        #             title="Clase espectral",
+        #             itemsizing='constant'
+        #         )
+        #     )
+
+        #     # Configurar los marcadores
+        #     HR2.update_traces(
+        #         mode='markers',
+        #         marker=dict(size=2)
+        #     )
+
+        #     HR2.update_traces(hovertemplate='<br>'.join([
+        #         'V-I: %{x:.2f}',
+        #         'M: %{y:.2f}']
+        #     ))
+
+        #     # Limitar el rango del eje x
+        #     HR2.update_xaxes(range=[-1.5, 6])
+
+        #     # Mostrar el gráfico
+        #     st.plotly_chart(HR2, use_container_width=True)
+
+        # col1, col2 = st.columns(2)
+        # with cols[0]:
+        #     # Crear el gráfico HR3D
+        #     HR3D = px.scatter_3d(x=df_parallax['V-I'],
+        #                          y=df_parallax['M_Hip'],
+        #                          z=df_parallax['T'],
+        #                          color=df_parallax["Tipo_espectral"])
+
+        #     # Configurar los ejes y la leyenda
+        #     HR3D.update_layout(
+        #         scene=dict(
+        #             xaxis_title="Índice V-I",
+        #             yaxis_title="Magnitud absoluta",
+        #             zaxis_title="Temperatura",
+        #         ),
+        #         xaxis=dict(autorange='reversed'),
+        #         yaxis=dict(autorange='reversed'),
+        #         height=900,
+        #         width=900,
+        #         legend=dict(
+        #             traceorder="normal",
+        #             title="Tipo espectral",
+        #             itemsizing='constant'
+        #         )
+        #     )
+
+        #     HR3D.update_traces(hovertemplate='<br>'.join([
+        #         'V-I: %{x:.2f}',
+        #         'M: %{y:.2f}',
+        #         'T: %{z:.2f} K',
+        #     ]))
+        #     # Configurar los marcadores
+        #     HR3D.update_traces(
+        #         mode='markers',
+        #         marker=dict(size=1.5)
+        #     )
+        # #     st.plotly_chart(HR3D, use_container_width=True)
+        # with cols[1]:
+        #     st.image('img/HR.jpeg', width=900)
 
 
 if __name__ == '__main__':
