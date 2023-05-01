@@ -1,3 +1,10 @@
+'''
+Programa de aplicación de Streamlit para visualizar datos astronómicos del catálogo Hipparcos.
+
+Nota: este código aún no ha sido optimizado para su máxima eficiencia y rapidez. Se aceptan sugerencias y mejoras para hacerlo más elegante y rápido. El código que aparece comentado era la primera versión de este código, parece que ahora con los decoradores de la caché funciona algo mejor, pero se agradecen todas las ideas que puedan ayudar a mejorar el rendimiento y la legibilidad del código. 
+'''
+
+
 import plotly.io as pio
 import requests
 from io import BytesIO
