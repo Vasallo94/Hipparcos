@@ -47,8 +47,7 @@ def main():
     with col2:
         lottie_url_hello = "https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json"
         lottie_hello = load_lottieurl(lottie_url_hello)
-        st_lottie(lottie_hello, key="hello", loop=True,
-                  caption='https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json')
+        st_lottie(lottie_hello, key="hello", loop=True)
         link_url = "https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json"
         st.image(img_url, use_column_width=True)
 
