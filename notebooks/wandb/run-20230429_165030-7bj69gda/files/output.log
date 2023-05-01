@@ -380,3 +380,31 @@ Matriz de confusión:
 {"shape": "(30733, 17)", "count": 30733, "type": "ndarray"}
 {"shape": "(71710, 17)", "count": 71710, "type": "ndarray"}
 {"shape": "(102443,)", "count": 102443, "type": "Series"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"ConfusionMatrixDisplay": "type", "GradientBoostingClassifier": "ABCMeta", "KNeighborsClassifier": "ABCMeta", "LabelEncoder": "type", "LogisticRegression": "type", "RandomForestClassifier": "ABCMeta", "StandardScaler": "type", "X": "DataFrame", "XGBClassifier": "type", "X_test": "DataFrame", "X_test_scaled": "ndarray", "X_train": "DataFrame", "X_train_scaled": "ndarray", "accuracy": "float64", "accuracy_score": "function", "column": "str", "conf_matrix": "ndarray", "confusion_matrix": "function", "df2": "DataFrame", "f": "BufferedWriter", "f1_score": "function", "le": "LabelEncoder", "learning_curve": "function", "model_XGB": "XGBClassifier", "np": "module", "pd": "module", "pickle": "module", "plt": "module", "precision_score": "function", "predictions_XGB": "ndarray", "recall_score": "function", "scaler": "StandardScaler", "train_test_split": "function", "wandb": "module", "y": "Series", "y_pred": "ndarray", "y_test": "Series", "y_train": "Series"}
+{"shape": "(64, 64)", "count": 64, "type": "ndarray"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"shape": "(30733, 17)", "count": 30733, "type": "ndarray"}
+{"shape": "(71710, 17)", "count": 71710, "type": "ndarray"}
+{"shape": "(102443,)", "count": 102443, "type": "Series"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"ConfusionMatrixDisplay": "type", "GradientBoostingClassifier": "ABCMeta", "KNeighborsClassifier": "ABCMeta", "LabelEncoder": "type", "LogisticRegression": "type", "RandomForestClassifier": "ABCMeta", "StandardScaler": "type", "X": "DataFrame", "XGBClassifier": "type", "X_test": "DataFrame", "X_test_scaled": "ndarray", "X_train": "DataFrame", "X_train_scaled": "ndarray", "accuracy": "float64", "accuracy_score": "function", "column": "str", "conf_matrix": "ndarray", "confusion_matrix": "function", "df2": "DataFrame", "f": "BufferedWriter", "f1_score": "function", "le": "LabelEncoder", "learning_curve": "function", "model_XGB": "XGBClassifier", "np": "module", "pd": "module", "pickle": "module", "plt": "module", "precision_score": "function", "predictions_XGB": "ndarray", "recall_score": "function", "scaler": "StandardScaler", "train_test_split": "function", "wandb": "module", "y": "Series", "y_pred": "ndarray", "y_test": "Series", "y_train": "Series"}
+{"shape": "(64, 64)", "count": 64, "type": "ndarray"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"shape": "(30733, 17)", "count": 30733, "type": "ndarray"}
+{"shape": "(71710, 17)", "count": 71710, "type": "ndarray"}
+{"shape": "(102443,)", "count": 102443, "type": "Series"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"ConfusionMatrixDisplay": "type", "GradientBoostingClassifier": "ABCMeta", "KNeighborsClassifier": "ABCMeta", "LabelEncoder": "type", "LogisticRegression": "type", "RandomForestClassifier": "ABCMeta", "StandardScaler": "type", "X": "DataFrame", "XGBClassifier": "type", "X_test": "DataFrame", "X_test_scaled": "ndarray", "X_train": "DataFrame", "X_train_scaled": "ndarray", "accuracy": "float64", "accuracy_score": "function", "column": "str", "conf_matrix": "ndarray", "confusion_matrix": "function", "df2": "DataFrame", "f": "BufferedWriter", "f1_score": "function", "le": "LabelEncoder", "learning_curve": "function", "model_XGB": "XGBClassifier", "np": "module", "pd": "module", "pickle": "module", "plt": "module", "precision_score": "function", "predictions_XGB": "ndarray", "recall_score": "function", "scaler": "StandardScaler", "train_test_split": "function", "wandb": "module", "y": "Series", "y_pred": "ndarray", "y_test": "Series", "y_train": "Series"}
+{"shape": "(64, 64)", "count": 64, "type": "ndarray"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"shape": "(30733, 17)", "count": 30733, "type": "ndarray"}
+{"shape": "(71710, 17)", "count": 71710, "type": "ndarray"}
+{"shape": "(102443,)", "count": 102443, "type": "Series"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"ConfusionMatrixDisplay": "type", "GradientBoostingClassifier": "ABCMeta", "KNeighborsClassifier": "ABCMeta", "LabelEncoder": "type", "LogisticRegression": "type", "RandomForestClassifier": "ABCMeta", "StandardScaler": "type", "X": "DataFrame", "XGBClassifier": "type", "X_test": "DataFrame", "X_test_scaled": "ndarray", "X_train": "DataFrame", "X_train_scaled": "ndarray", "accuracy": "float64", "accuracy_score": "function", "column": "str", "conf_matrix": "ndarray", "confusion_matrix": "function", "df2": "DataFrame", "f": "BufferedWriter", "f1_score": "function", "le": "LabelEncoder", "learning_curve": "function", "model_XGB": "XGBClassifier", "np": "module", "pd": "module", "pickle": "module", "plt": "module", "precision_score": "function", "predictions_XGB": "ndarray", "recall_score": "function", "scaler": "StandardScaler", "train_test_split": "function", "wandb": "module", "y": "Series", "y_pred": "ndarray", "y_test": "Series", "y_train": "Series"}
+{"shape": "(64, 64)", "count": 64, "type": "ndarray"}
+{"shape": "(30733,)", "count": 30733, "type": "ndarray"}
+{"shape": "(30733, 17)", "count": 30733, "type": "ndarray"}
+{"shape": "(71710, 17)", "count": 71710, "type": "ndarray"}
+{"shape": "(102443,)", "count": 102443, "type": "Series"}
