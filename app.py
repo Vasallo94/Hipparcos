@@ -22,8 +22,16 @@ st.set_option("deprecation.showPyplotGlobalUse", False)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # Lectura de datos
-df_parallax = pd.read_parquet('data/hipparcos_final.parquet')
-variables = pd.read_parquet('data/variables.parquet')
+
+
+@st.cache_data()
+def load_data():
+    df_parallax = pd.read_parquet('data/hipparcos_final.parquet')
+    variables = pd.read_parquet('data/variables.parquet')
+    return df_parallax, variables
+
+
+df_parallax, variables = load_data()
 
 
 def load_lottieurl(url: str):
@@ -60,12 +68,11 @@ def main():
 
     # Tab 1
     with tabs[0]:
-        st.markdown('### Distancias en astronomía: Paralaje')
+        st.markdown('### Distancias en astronomía: Paralaje \n')
 
         cols = st.columns(2)
 
         with cols[0]:
-            st.write("¿Qué es la paralaje?")
             # Agregar el caption
 
             st.image('img/parallax.jpeg',
@@ -73,10 +80,9 @@ def main():
             st.latex(r'''d(\text{pasecs})=\frac{1}{p(\text{arcsec})}''')
             st.latex(r'''1 \,\text{pc} = 3,26 \,\text{años-luz}''')
 
-            dist_hist = go.Figure()
         with cols[1]:
-            dist_hist.add_trace(go.Histogram(
-                x=df_parallax['d'], nbinsx=100))
+            dist_hist = px.histogram(
+                df_parallax, x=df_parallax['d'], nbins=100)
             dist_hist.update_layout(title="Distribución de la distancia",
                                     xaxis_title="Distancia [pc]", yaxis_title="Recuento", template='plotly_dark', height=400, width=800)
             st.plotly_chart(dist_hist,  use_container_width=True)
@@ -111,6 +117,46 @@ def main():
         mov_propio = create_mov_propio_fig(df_parallax)
 
         st.plotly_chart(mov_propio, use_container_width=True)
+        #     @st.cache_data()
+        #     def plot_distance_distribution():
+        #         dist_hist = go.Figure()
+        #         dist_hist.add_trace(go.Histogram(
+        #             x=df_parallax['d'], nbinsx=100))
+        #         dist_hist.update_layout(title="Distribución de la distancia",
+        #                                 xaxis_title="Distancia [pc]", yaxis_title="Recuento", template='plotly_dark', height=400, width=800)
+        #         st.plotly_chart(dist_hist,  use_container_width=True)
+        #         st.markdown(
+        #             "Cuanto más lejanas son las estrellas más pequeño es el ángulo de la paralaje y por tanto menos medidas.")
+        #     plot_distance_distribution(df_parallax)
+
+        # @st.cache_data()
+        # def create_mov_propio_fig(df):
+        #     mov_propio = px.scatter(df, x="pmRA", y="pmDE", color="d", range_color=[df["d"].min(), df["d"].max()],
+        #                             color_continuous_scale='viridis', opacity=0.7)
+
+        #     mov_propio.update_layout(
+        #         xaxis_title="Movimiento propio en ascensión recta",
+        #         yaxis_title="Movimiento propio en declinación",
+        #         title="",
+        #         xaxis_range=[-180, 180],
+        #         yaxis_range=[-180, 180],
+        #         coloraxis_colorbar=dict(
+        #             title="distance [pc]"
+        #         ),    template="plotly_dark",
+        #         height=400,
+        #         width=800
+        #     )
+        #     mov_propio.update_traces(
+        #         mode='markers',
+        #         marker=dict(size=2)
+        #     )
+        #     return mov_propio
+
+        # st.markdown("### Movimientos propios de las estrellas")
+
+        # mov_propio = create_mov_propio_fig(df_parallax)
+
+        # st.plotly_chart(mov_propio, use_container_width=True)
 
         # with cols[1]:
         #     dist_hist = go.Figure()
@@ -148,6 +194,36 @@ def main():
     # Tab 2
     with tabs[1]:
         st.markdown('### Clasificación espectral')
+
+        # Define la función para generar el histograma de tipo espectral
+
+        # @st.cache_data()
+        # def create_tipo_espec_fig(df):
+        #     fig = px.histogram(df, x="Tipo_espectral",
+        #                        labels={"Tipo_espectral": "Tipo espectral",
+        #                                "count": "Recuento"},
+        #                        category_orders={"Tipo_espectral": [
+        #                            'O', 'B', 'A', 'F', 'G', 'K', 'M']},
+        #                        title="Número de estrellas por tipo espectral del catálogo Hipparcos", color='Tipo_espectral')
+        #     fig.update_yaxes(title="Recuento")
+        #     fig.update_layout(height=400, width=800)
+        #     return fig
+
+        # # Define la función para generar el histograma de clase espectral
+        # @st.cache_data()
+        # def create_clase_fig(df):
+        #     fig = px.histogram(df, x='Clase_espectral',
+        #                        nbins=70, color='Tipo_espectral')
+        #     fig.update_layout(title="Recuento de estrellas por clase espectral", xaxis_title="Clase",
+        #                       yaxis_title="Cantidad de estrellas", bargap=0.1, height=600, width=1100)
+        #     return fig
+
+        # # Mostrar los gráficos
+        # st.plotly_chart(create_tipo_espec_fig(
+        #     df_parallax), use_container_width=True)
+        # st.plotly_chart(create_clase_fig(df_parallax),
+        #                 use_container_width=True)
+
         # Crea una columna categórica con las categorías en el orden deseado
         cat_order = pd.Categorical(df_parallax['Tipo_espectral'],
                                    categories=['O', 'B', 'A',
@@ -490,7 +566,7 @@ def main():
     with tabs[3]:
         variab = px.histogram(variables, x="Period", nbins=200, log_y=True, template='plotly_dark',
                               title="Histograma del período estelar en el catálogo Hipparcos")
-
+        tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
         # Actualizar el diseño
         variab.update_layout(xaxis_title="Período [Días]", yaxis_title="log(N)",
                              height=600,
@@ -553,6 +629,7 @@ def main():
 
                 return HR
             st.plotly_chart(generar_HR(df_parallax), use_container_width=True)
+
         with cols[1]:
             @st.cache_data()
             def generar_HR2(df_parallax):
@@ -639,8 +716,9 @@ def main():
                 return HR3D
             st.plotly_chart(generar_HR3D(df_parallax),
                             use_container_width=True)
+
         with cols[1]:
-            st.image('img/HR.jpeg', width=900)
+            st.image('img/HR.jpeg', use_column_width='auto')
         #     df_parallax['Tipo_espectral'] = pd.Categorical(
         #         df_parallax['Tipo_espectral'], categories=tipo_espectral_order)
 
