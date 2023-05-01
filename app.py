@@ -17,7 +17,7 @@ pio.templates.default = "plotly_dark"
 
 # Configuración de la página
 st.set_page_config(page_title="Hipparcos",
-                   layout="wide", page_icon="✨", initial_sidebar_state="expanded")
+                   layout="wide", page_icon="✨")
 st.set_option("deprecation.showPyplotGlobalUse", False)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
