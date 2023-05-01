@@ -24,6 +24,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def main():
+    # Cambiar la fuente de texto
+    st.write(
+        """ <style>h1, h2, h3, h4, h5, h6 { font-family: 'roman'; } </style>""", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("# Hipparcos")
