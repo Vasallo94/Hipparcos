@@ -34,6 +34,7 @@ def load_lottieurl(url: str):
 
 
 def main():
+    @st.cache
     # Cambiar la fuente de texto
     st.write(
         """ <style>h1, h2, h3, h4, h5, h6 { font-family: 'roman'; } </style>""", unsafe_allow_html=True)
