@@ -49,6 +49,8 @@ def main():
         lottie_hello = load_lottieurl(lottie_url_hello)
         st_lottie(lottie_hello, key="hello", loop=True,
                   caption='https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json')
+        link_url = "https://assets8.lottiefiles.com/packages/lf20_afg1tquy.json"
+        st.image(img_url, use_column_width=True)
 
     st.markdown("""---""")
     st.markdown("<center><h2><l style='color:white; font-size: 30px;'>Estudio astronómico de los datos</h2></l></center>", unsafe_allow_html=True)
