@@ -72,9 +72,9 @@ def main():
                      caption='https://josevicentediaz.com/astronomia-practica/paralajes-estelares-distancias-astronomicas/', use_column_width=True)
             st.latex(r'''d(\text{pasecs})=\frac{1}{p(\text{arcsec})}''')
             st.latex(r'''1 \,\text{pc} = 3,26 \,\text{años-luz}''')
-        with cols[1]:
-            dist_hist = go.Figure()
 
+            dist_hist = go.Figure()
+        with cols[1]:
             dist_hist.add_trace(go.Histogram(
                 x=df_parallax['d'], nbinsx=100))
             dist_hist.update_layout(title="Distribución de la distancia",
@@ -83,28 +83,68 @@ def main():
             st.markdown(
                 "Cuanto más lejanas son las estrellas más pequeño es el ángulo de la paralaje y por tanto menos medidas.")
 
-        cols = st.columns(1)
-        st.markdown("### Movimientos propios de las estrellas")
-        mov_propio = px.scatter(df_parallax, x="pmRA", y="pmDE", color="d", range_color=[df_parallax["d"].min(), df_parallax["d"].max()],
-                                color_continuous_scale='viridis', opacity=0.7)
+        @st.cache_data()
+        def create_mov_propio_fig(df):
+            mov_propio = px.scatter(df, x="pmRA", y="pmDE", color="d", range_color=[df["d"].min(), df["d"].max()],
+                                    color_continuous_scale='viridis', opacity=0.7)
 
-        mov_propio.update_layout(
-            xaxis_title="Movimiento propio en ascensión recta",
-            yaxis_title="Movimiento propio en declinación",
-            title="",
-            xaxis_range=[-180, 180],
-            yaxis_range=[-180, 180],
-            coloraxis_colorbar=dict(
-                title="distance [pc]"
-            ),    template="plotly_dark",
-            height=400,
-            width=800
-        )
-        mov_propio.update_traces(
-            mode='markers',
-            marker=dict(size=2)
-        )
+            mov_propio.update_layout(
+                xaxis_title="Movimiento propio en ascensión recta",
+                yaxis_title="Movimiento propio en declinación",
+                title="",
+                xaxis_range=[-180, 180],
+                yaxis_range=[-180, 180],
+                coloraxis_colorbar=dict(
+                    title="distance [pc]"
+                ),    template="plotly_dark",
+                height=400,
+                width=800
+            )
+            mov_propio.update_traces(
+                mode='markers',
+                marker=dict(size=2)
+            )
+            return mov_propio
+
+        st.markdown("### Movimientos propios de las estrellas")
+
+        mov_propio = create_mov_propio_fig(df_parallax)
+
         st.plotly_chart(mov_propio, use_container_width=True)
+
+        # with cols[1]:
+        #     dist_hist = go.Figure()
+
+        #     dist_hist.add_trace(go.Histogram(
+        #         x=df_parallax['d'], nbinsx=100))
+        #     dist_hist.update_layout(title="Distribución de la distancia",
+        #                             xaxis_title="Distancia [pc]", yaxis_title="Recuento", template='plotly_dark', height=400, width=800)
+        #     st.plotly_chart(dist_hist,  use_container_width=True)
+        #     st.markdown(
+        #         "Cuanto más lejanas son las estrellas más pequeño es el ángulo de la paralaje y por tanto menos medidas.")
+
+        # cols = st.columns(1)
+        # st.markdown("### Movimientos propios de las estrellas")
+        # mov_propio = px.scatter(df_parallax, x="pmRA", y="pmDE", color="d", range_color=[df_parallax["d"].min(), df_parallax["d"].max()],
+        #                         color_continuous_scale='viridis', opacity=0.7)
+
+        # mov_propio.update_layout(
+        #     xaxis_title="Movimiento propio en ascensión recta",
+        #     yaxis_title="Movimiento propio en declinación",
+        #     title="",
+        #     xaxis_range=[-180, 180],
+        #     yaxis_range=[-180, 180],
+        #     coloraxis_colorbar=dict(
+        #         title="distance [pc]"
+        #     ),    template="plotly_dark",
+        #     height=400,
+        #     width=800
+        # )
+        # mov_propio.update_traces(
+        #     mode='markers',
+        #     marker=dict(size=2)
+        # )
+        # st.plotly_chart(mov_propio, use_container_width=True)
     # Tab 2
     with tabs[1]:
         st.markdown('### Clasificación espectral')
@@ -170,6 +210,7 @@ def main():
         st.markdown(
             '#### Magnitud visual aparente: Estrellas visibles y algunas constelaciones conocidas')
 
+        @st.cache_data()
         def filter_visible(data, cutoff_magnitude):
             visible = data[data['Vmag'] < cutoff_magnitude]
             return visible
@@ -213,7 +254,7 @@ def main():
                                    ]))
             st.plotly_chart(orion, use_container_width=True)
             del visible
-            
+
         # ESTE ES EL CÓDIGO DE ARRIBA PERO SIN SER FUNCIÓN Y SIN EL DECORADOR @ST.CACHE_DATA
 
         # with cols[0]:
@@ -257,49 +298,106 @@ def main():
         #     st.plotly_chart(orion, use_container_width=True)
         #     del visible
 
-        mag = px.histogram(df_parallax, x="Vmag", nbins=100)
-        mag.update_layout(
-            xaxis_title="Magnitud visual aparente",
-            yaxis_title="Recuento",
-            title="Distribución de estrellas según su magnitud aparente",
-            height=600,
-            width=1000,)
+        @st.cache_data()
+        def create_visualizations(df_parallax):
+            tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
+
+            # Crear histograma de la magnitud visual aparente
+            mag = px.histogram(df_parallax, x="Vmag", nbins=100)
+            mag.update_layout(
+                xaxis_title="Magnitud visual aparente",
+                yaxis_title="Recuento",
+                title="Distribución de estrellas según su magnitud aparente",
+                height=600,
+                width=1000,
+            )
+
+            # Ordenar el DataFrame por el tipo espectral
+            df_parallax_sorted = df_parallax.sort_values(
+                'Tipo_espectral', key=lambda x: pd.Categorical(
+                    x, categories=tipo_espectral_order, ordered=True
+                )
+            )
+
+            # Crear histograma de la magnitud visual aparente con el tipo espectral
+            dist_type = px.histogram(
+                df_parallax_sorted, x="Vmag", color="Tipo_espectral", nbins=100,
+                title='Distribución de las magnitudes visuales con base en el tipo espectral de las estrellas'
+            )
+
+            # Actualizar el orden de la leyenda y los títulos de los ejes
+            dist_type.update_layout(
+                legend=dict(
+                    traceorder="normal",
+                    title="Tipo espectral",
+                    itemsizing='constant'
+                ),
+                xaxis=dict(
+                    title="Magnitud visual aparente"
+                ),
+                yaxis=dict(
+                    title="Recuento"
+                ),
+                height=600,
+                width=1000
+            )
+
+            return mag, dist_type
+
+        # Llamar a la función para crear las visualizaciones
+        mag, dist_type = create_visualizations(df_parallax)
+
+        # Mostrar las visualizaciones
         st.plotly_chart(mag, use_container_width=True)
-
-        tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
-
-        # Ordenar el DataFrame por la variable categórica 'Tipo_espectral'
-        df_parallax_sorted = df_parallax.sort_values('Tipo_espectral', key=lambda x: pd.Categorical(
-            x, categories=tipo_espectral_order, ordered=True))
-        # Crear la figura
-        dist_type = px.histogram(df_parallax_sorted, x="Vmag", color="Tipo_espectral", nbins=100,
-                                 title='Distribución de las magnitudes visuales con base en el tipo espectral de las estrellas')
-
-        # Actualizar el orden de la leyenda y los títulos de los ejes
-        dist_type.update_layout(
-            legend=dict(
-                traceorder="normal",
-                title="Tipo espectral",
-                itemsizing='constant'
-            ),
-            xaxis=dict(
-                title="Magnitud visual aparente"
-            ),
-            yaxis=dict(
-                title="Recuento"
-            ),
-            height=600,
-            width=1000
-        )
-
-        # Mostrar la figura
         st.plotly_chart(dist_type, use_container_width=True)
 
+        # Resetear el índice del DataFrame
         df_parallax.reset_index(drop=True, inplace=True)
+
+        # mag = px.histogram(df_parallax, x="Vmag", nbins=100)
+        # mag.update_layout(
+        #     xaxis_title="Magnitud visual aparente",
+        #     yaxis_title="Recuento",
+        #     title="Distribución de estrellas según su magnitud aparente",
+        #     height=600,
+        #     width=1000,)
+        # st.plotly_chart(mag, use_container_width=True)
+
+        # tipo_espectral_order = ['O', 'B', 'A', 'F', 'G', 'K', 'M']
+
+        # # Ordenar el DataFrame por la variable categórica 'Tipo_espectral'
+        # df_parallax_sorted = df_parallax.sort_values('Tipo_espectral', key=lambda x: pd.Categorical(
+        #     x, categories=tipo_espectral_order, ordered=True))
+        # # Crear la figura
+        # dist_type = px.histogram(df_parallax_sorted, x="Vmag", color="Tipo_espectral", nbins=100,
+        #                          title='Distribución de las magnitudes visuales con base en el tipo espectral de las estrellas')
+
+        # # Actualizar el orden de la leyenda y los títulos de los ejes
+        # dist_type.update_layout(
+        #     legend=dict(
+        #         traceorder="normal",
+        #         title="Tipo espectral",
+        #         itemsizing='constant'
+        #     ),
+        #     xaxis=dict(
+        #         title="Magnitud visual aparente"
+        #     ),
+        #     yaxis=dict(
+        #         title="Recuento"
+        #     ),
+        #     height=600,
+        #     width=1000
+        # # )
+
+        # # Mostrar la figura
+        # st.plotly_chart(dist_type, use_container_width=True)
+
+        # df_parallax.reset_index(drop=True, inplace=True)
 
         cols = st.columns(2)
 
-        with cols[0]:
+        @st.cache_data()
+        def create_magnitudes_plot(df_parallax):
             hist_data = [df_parallax["BTmag"],
                          df_parallax["VTmag"], df_parallax["Hpmag"]]
 
@@ -318,10 +416,10 @@ def main():
                 height=600,
                 width=1000)
 
-            # Mostrar el gráfico
-            st.plotly_chart(magnitudes, use_container_width=True)
+            return magnitudes
 
-        with cols[1]:
+        @st.cache_data()
+        def create_cumulative_plot(df_parallax):
             # Crear el histograma con distribución acumulada
             cumulative = px.histogram(df_parallax, x="Vmag", nbins=50, cumulative=True,
                                       title="Distribución de la magnitud visual aparente (Acumulativo)",
@@ -337,8 +435,57 @@ def main():
                 width=1000,
                 template="plotly_dark")
 
-            # Mostrar el gráfico
+            return cumulative
+
+        # Llamar a las funciones para crear las gráficas
+        with cols[0]:
+            magnitudes = create_magnitudes_plot(df_parallax)
+            st.plotly_chart(magnitudes, use_container_width=True)
+
+        with cols[1]:
+            cumulative = create_cumulative_plot(df_parallax)
             st.plotly_chart(cumulative, use_container_width=True)
+
+        # with cols[0]:
+        #     hist_data = [df_parallax["BTmag"],
+        #                  df_parallax["VTmag"], df_parallax["Hpmag"]]
+
+        #     group_labels = ['Magnitud BT aparente',
+        #                     'Magnitud VT aparente', 'Magnitud HP aparente']
+
+        #     # Crear el distplot con el tamaño personalizado de los bins
+        #     magnitudes = ff.create_distplot(
+        #         hist_data, group_labels, bin_size=0.2)
+
+        #     # Actualizar el diseño
+        #     magnitudes.update_layout(
+        #         title='Distribución de magnitudes en el catálogo Hipparcos',
+        #         xaxis_title='Magnitud aparente',
+        #         yaxis_title='Densidad',
+        #         height=600,
+        #         width=1000)
+
+        #     # Mostrar el gráfico
+        #     st.plotly_chart(magnitudes, use_container_width=True)
+
+        # with cols[1]:
+        #     # Crear el histograma con distribución acumulada
+        #     cumulative = px.histogram(df_parallax, x="Vmag", nbins=50, cumulative=True,
+        #                               title="Distribución de la magnitud visual aparente (Acumulativo)",
+        #                               labels={'Vmag': 'Magnitud aparente visual'})
+
+        #     # Cambiar el título y los nombres de los ejes a español
+        #     cumulative.update_layout(
+        #         xaxis_title='Magnitud aparente V', yaxis_title='Recuento')
+        #     cumulative.update_traces(
+        #         hovertemplate="Magnitud aparente visual: %{x}")
+        #     cumulative.update_layout(
+        #         height=600,
+        #         width=1000,
+        #         template="plotly_dark")
+
+        #     # Mostrar el gráfico
+        #     st.plotly_chart(cumulative, use_container_width=True)
     # Tab 4
     with tabs[3]:
         variab = px.histogram(variables, x="Period", nbins=200, log_y=True, template='plotly_dark',
