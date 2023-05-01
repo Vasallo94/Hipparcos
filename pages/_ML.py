@@ -26,5 +26,6 @@ def main():
     st.markdown("# Machine Learning aplicado al catálogo estelar Hipparcos")
 
 
+
 if __name__ == '__main__':
     main()
