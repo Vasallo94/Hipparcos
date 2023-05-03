@@ -76,7 +76,7 @@ def main():
         # Crear menú de Streamlit
         st.title('Modifica los valores de tu estrella para clasificarla')
         st.markdown(
-            'Utiliza el slider para modificar los valores del DataFrame:')
+            'Utiliza el slider para modificar los valores de `Vmag`, `B-V` y `d` el resto se ajustarán automáticamente con base en estos tres parámetros:')
 
         # Inicializamos un dataframe con valores por defecto
         X_new = pd.DataFrame([[8.312439, 9.11, 8.32, 0.69, 0.749, 5.0, 8.41, 0.740, 248, 0.0, 0.0]],
@@ -133,7 +133,7 @@ def main():
 
         # Widget para seleccionar el modelo
         model_selector = st.selectbox('Selecciona un modelo', (
-            'Logistic Regression', 'Random Forest', 'KNN', 'Gradient Boost', 'XGBoost'))
+            'Logistic Regression', 'SVC', 'KNN', 'Gradient Boost', 'XGBoost'))
         st.write('Modelo seleccionado:', model_selector)
 
         # Seleccionar el modelo adecuado

@@ -247,6 +247,8 @@ def main():
             return fig
 
         # Define la función para generar el histograma de clase espectral
+        # Crear la categoría ordenada
+
         @st.cache_data()
         def create_clase_fig(df):
             fig = px.histogram(df, x='Clase_espectral',
@@ -254,6 +256,38 @@ def main():
             fig.update_layout(title="Recuento de estrellas por clase espectral", xaxis_title="Clase",
                               yaxis_title="Cantidad de estrellas", bargap=0.1, height=600, width=1100)
             return fig
+
+        # @st.cache_data()
+        # def create_clase_fig(df):
+        #     # Crear la categoría ordenada
+        #     cat_order = pd.Categorical(df['Clase_espectral'],
+        #                                categories=['O0', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9',
+        #                                            'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9',
+        #                                            'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9',
+        #                                            'F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9',
+        #                                            'G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9',
+        #                                            'K0', 'K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9',
+        #                                            'M0', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9'],
+        # #                                ordered=True)
+
+        #     # Crear una nueva columna con la categoría ordenada
+        #     df['Clase_espectral_orden'] = cat_order
+
+        #     # Ordenar el dataframe por la columna Clase_espectral_orden
+        #     df = df.sort_values(by=['Clase_espectral_orden'])
+
+        #     # Crear la figura de histograma con la categoría ordenada
+        #     fig = px.histogram(df, x='Clase_espectral_orden',
+        #                        nbins=70, color='Tipo_espectral')
+
+        #     # Actualizar el diseño de la figura
+        #     fig.update_layout(title="Recuento de estrellas por clase espectral", xaxis_title="Clase",
+        #                       yaxis_title="Cantidad de estrellas", bargap=0.1, height=600, width=1100)
+
+        #     # Eliminar el dataframe intermedio creado por pd.Categorical
+        #     del cat_order
+
+        #     return fig
 
         # Mostrar los gráficos
         st.plotly_chart(create_tipo_espec_fig(
@@ -295,7 +329,7 @@ def main():
         # del cat_order
         # st.plotly_chart(tipo_espec, use_container_width=True)
 
-        # # Crear la categoría ordenada
+        # Crear la categoría ordenada
         # cat_order = pd.Categorical(df_parallax['Clase_espectral'],
         #                            categories=['O0', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9',
         #                                        'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9',
@@ -353,7 +387,7 @@ def main():
 
                         La magnitud visual de las estrellas se utiliza para clasificarlas en diferentes categorías según su brillo aparente. Las estrellas más brillantes tienen una magnitud visual negativa, mientras que las estrellas menos brillantes tienen una magnitud visual positiva.
 
-                        En resumen, la magnitud visual de las estrellas es una medida importante para clasificar y comparar el brillo aparente de las estrellas.
+                        Por tanto, la magnitud visual de las estrellas es una medida importante para clasificar y comparar el brillo aparente de las estrellas.
                 """)
 
         @st.cache_data()
@@ -599,7 +633,7 @@ def main():
 
                 Al comparar la densidad numérica de estrellas en diferentes regiones del cielo, los astrónomos también pueden estudiar los efectos de los cúmulos de galaxias y otras estructuras a gran escala en la distribución de materia en el universo. Esto puede proporcionar pistas importantes sobre la naturaleza de la materia oscura y la energía oscura, que se cree que son los componentes dominantes del universo pero no son directamente observables.
 
-                En resumen, la distribución acumulada de estrellas es una herramienta importante para que los astrónomos estudien la estructura a gran escala del universo y verifiquen nuestra comprensión actual de la cosmología.
+                La distribución acumulada de estrellas es una herramienta importante para que los astrónomos estudien la estructura a gran escala del universo y verifiquen nuestra comprensión actual de la cosmología.
                 """)
 
         # with cols[0]:
@@ -677,7 +711,7 @@ def main():
                                height=600,
                                width=1000)
         st.plotly_chart(var_type, use_container_width=True)
-        expander = st.expander("¿Qué son los tipos de variabilidad?")
+        expander = st.expander("¿Qué quieren decir estos tipos de variabilidad?")
         expander.write("""
                 Los diferentes tipos de variabilidad estelar significan lo siguiente:
 
@@ -695,15 +729,16 @@ def main():
     with tabs[4]:
         st.markdown('### El diagrama Hertzsprung-Russell')
         expander = st.expander("¿Qué es el diagrama Hertzsprung-Russell?")
-        expander.write("""El diagrama de Hertzsprung-Russell (HR) es uno de los diagramas más importantes en la astronomía estelar. Fue creado por Ejnar Hertzsprung y Henry Norris Russell en la década de 1910 y es una representación gráfica de la luminosidad estelar en función de su temperatura superficial.
-
-        En el eje vertical del diagrama, se representa la luminosidad estelar en unidades solares $(L/L_\odot)$, mientras que en el eje horizontal se representa la temperatura superficial estelar en grados Kelvin. De esta forma, las estrellas más luminosas y calientes se sitúan en la parte superior izquierda del diagrama, mientras que las menos luminosas y frías se sitúan en la parte inferior derecha.
-
-        El diagrama HR permite a los astrónomos clasificar las estrellas según su luminosidad, temperatura y otros parámetros. Por ejemplo, las estrellas de la secuencia principal se sitúan en una banda diagonal que atraviesa el diagrama, conocida como la secuencia principal. También se pueden identificar otras regiones como las gigantes rojas, las supergigantes, las enanas blancas, entre otras.
-
-        Además, el diagrama HR es una herramienta importante para el estudio de la evolución estelar, ya que permite observar cómo las estrellas cambian a medida que avanzan en su ciclo de vida. De hecho, la posición de una estrella en el diagrama HR puede proporcionar información sobre su edad, masa, estado evolutivo y destino final.
-
-        En resumen, el diagrama de Hertzsprung-Russell es una herramienta fundamental en la astronomía estelar que permite clasificar, estudiar y entender las propiedades y la evolución de las estrellas.""")
+        expander.markdown("""
+                          El diagrama de Hertzsprung-Russell (HR) es uno de los diagramas más importantes en la astronomía estelar. Fue creado por Ejnar Hertzsprung y Henry Norris Russell en la década de 1910 y es una representación gráfica de la luminosidad estelar en función de su temperatura superficial.
+                          En el eje vertical del diagrama, se representa la luminosidad estelar en unidades solares $(L/L_\odot)$, mientras que en el eje horizontal se representa la temperatura superficial estelar en grados Kelvin. De esta forma, las estrellas más luminosas y calientes se sitúan en la parte superior izquierda del diagrama, mientras que las menos luminosas y frías se sitúan en la parte inferior derecha.
+                          
+                          El diagrama HR permite a los astrónomos clasificar las estrellas según su luminosidad, temperatura y otros parámetros. Por ejemplo, las estrellas de la secuencia principal se sitúan en una banda diagonal que atraviesa el diagrama, conocida como la secuencia principal. También se pueden identificar otras regiones como las gigantes rojas, las supergigantes, las enanas blancas, entre otras.
+                          
+                          Además, el diagrama HR es una herramienta importante para el estudio de la evolución estelar, ya que permite observar cómo las estrellas cambian a medida que avanzan en su ciclo de vida. De hecho, la posición de una estrella en el diagrama HR puede proporcionar información sobre su edad, masa, estado evolutivo y destino final.
+                          
+                          Así pues, el diagrama de Hertzsprung-Russell es una herramienta fundamental en la astronomía estelar que permite clasificar, estudiar y entender las propiedades y la evolución de las estrellas.
+        """)
 
         st.markdown('#### La magnitud absoluta y el índice de color')
         expander = st.expander("La magnitud absoluta")
@@ -713,11 +748,12 @@ def main():
 
         st.latex(r'''M = m - 5 \times \log_{10}\left(d_{pc} \right) + 5''')
 
-        expander = st.expander('El índice de color')
+        expander = st.expander(
+            'El índice de color y la temperatura superficial')
         expander.markdown("""
-                          Por otro lado, el __índice de color__ es una medida de la temperatura de una estrella. Se calcula comparando la magnitud aparente de la estrella en dos bandas de color diferentes, generalmente la banda B (azul) y la banda V (verde). El índice de color se define como la diferencia de magnitud entre la banda B y la banda V. Si una estrella tiene un índice de color pequeño, significa que emite más luz en la banda V que en la banda B, lo que sugiere que su temperatura es relativamente baja. Por otro lado, si el índice de color es grande, la estrella emite más luz en la banda B que en la banda V, lo que sugiere que su temperatura es relativamente alta. 
+                          Por otro lado, el __índice de color__ es una medida de la temperatura de una estrella. Se calcula comparando la magnitud aparente de la estrella en dos bandas de color diferentes, generalmente la banda B (azul) y la banda V (visual). El índice de color se define como la diferencia de magnitud entre la banda B y la banda V. Si una estrella tiene un índice de color pequeño, significa que emite más luz en la banda V que en la banda B, lo que sugiere que su temperatura es relativamente baja. Por otro lado, si el índice de color es grande, la estrella emite más luz en la banda B que en la banda V, lo que sugiere que su temperatura es relativamente alta. 
 
-                            Para calcular la temperatura superficial de las estrellas haremos uso de la fórmula:
+                        Para calcular la temperatura superficial de las estrellas haremos uso de la fórmula:
                             """)
 
         st.latex(r'''T = \frac{8540\,\text{K}}{(B-V)+0.865}''')
@@ -738,7 +774,7 @@ def main():
                 # Configurar los ejes y la leyenda
                 HR.update_layout(
                     xaxis_title="B-V [mag]",
-                    yaxis_title="M_v [mag]",
+                    yaxis_title="Magnitud absoluta [mag]",
                     yaxis=dict(autorange='reversed'),
                     height=900,
                     width=900,
@@ -779,7 +815,7 @@ def main():
                 # Configurar los ejes y la leyenda
                 HR2.update_layout(
                     xaxis_title="V-I [mag]",
-                    yaxis_title=r"M_{Hip}\,[mag]",
+                    yaxis_title="Magnitud Absoluta Hipparcos [mag]",
                     yaxis=dict(autorange='reversed'),
                     height=900,
                     width=900,
@@ -819,9 +855,9 @@ def main():
                 # Configurar los ejes y la leyenda
                 HR3D.update_layout(
                     scene=dict(
-                        xaxis_title="Índice V-I",
-                        yaxis_title="Magnitud absoluta",
-                        zaxis_title="Temperatura",
+                        xaxis_title="Índice V-I [mag]",
+                        yaxis_title="Magnitud absoluta [mag]",
+                        zaxis_title="Temperatura [K]",
                     ),
                     xaxis=dict(autorange='reversed'),
                     yaxis=dict(autorange='reversed'),
