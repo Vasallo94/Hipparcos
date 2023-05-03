@@ -139,8 +139,6 @@ def main():
         # Seleccionar el modelo adecuado
         if model_selector == 'Logistic Regression':
             model = model_LR
-        elif model_selector == 'Random Forest':
-            model = model_RF
         elif model_selector == 'KNN':
             model = model_KNN
         elif model_selector == 'Gradient Boost':
