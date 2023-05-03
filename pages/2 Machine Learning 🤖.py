@@ -85,30 +85,38 @@ def main():
         # Crear sliders para cada columna del DataFrame
         Vmag = st.slider('Vmag', min_value=-1.5,
                          max_value=14.0, value=float(X_new['Vmag'][0]))
-        BTmag = st.slider('BTmag', min_value=-0.5,
-                          max_value=15.0, value=float(X_new['BTmag'][0]))
-        VTmag = st.slider('VTmag', min_value=-0.6,
-                          max_value=12.0, value=float(X_new['VTmag'][0]))
         B_V = st.slider('B-V', min_value=-0.4,
                         max_value=5.46, value=float(X_new['B-V'][0]))
-        V_I = st.slider('V-I', min_value=-0.49,
-                        max_value=9.03, value=float(X_new['V-I'][0]))
-        Hpmag = st.slider('Hpmag', min_value=-1.1,
-                          max_value=14.6, value=float(X_new['Hpmag'][0]))
-        V_I_red = st.slider('(V-I)red', min_value=-0.52,
-                            max_value=9.29, value=float(X_new['(V-I)red'][0]))
+
         d = st.slider('d [parsec]', min_value=1.2, max_value=990.0,
                       value=float(X_new['d'][0]))
 
         # Calcular valores predeterminados para T, M_v y M_Hip
+        BTmag_default = 0.88114 * Vmag + 1.78857
+        VTmag_default = 0.8588 * Vmag + 1.18088
+        V_I_default = 1.0595 * B_V + 0.01201
+        V_I_red_default = 1.0024 * V_I_default + 0.01201
+
         T_default = 8540 / (B_V + 0.865)
         M_v_default = (Vmag - 5 *
                        np.log10(d)+5).astype(np.float32)
-        M_Hip_default = (Hpmag - 5 *
+        Hpmag_default = 1.00564 * Vmag + 0.05840
+
+        M_Hip_default = (Hpmag_default - 5 *
                          np.log10(d)+5).astype(np.float32)
 
         # Establecer valores predeterminados para T, M_v y M_Hip y deshabilitar los sliders correspondientes
-        T = st.slider('T [K]', min_value=1300.0, max_value=1900.0,
+        BTmag = st.slider('BTmag', min_value=-0.5,
+                          max_value=15.0, value=float(BTmag_default))
+        VTmag = st.slider('VTmag', min_value=-0.6,
+                          max_value=12.0, value=float(VTmag_default))
+        V_I = st.slider('V-I', min_value=-0.49,
+                        max_value=9.03, value=float(V_I_default))
+        Hpmag = st.slider('Hpmag', min_value=-1.1,
+                          max_value=14.6, value=float(Hpmag_default))
+        V_I_red = st.slider('(V-I)red', min_value=-0.52,
+                            max_value=9.29, value=float(V_I_red_default))
+        T = st.slider('T [K]', min_value=1300.0, max_value=18366.0,
                       value=float(T_default), key="T")
         M_v = st.slider('M_v', min_value=-9.0,
                         max_value=16.0, value=float(M_v_default), key="M_v")
