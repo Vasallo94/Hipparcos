@@ -33,7 +33,7 @@ def load_model(model_name):
 model_LR = load_model('output/Tipo_GradientBoost.pkl')
 model_KNN = load_model('output/Tipo_KNN.pkl')
 model_GB = load_model('output/Tipo_GradientBoost.pkl')
-model_SCV = load_model('output/Tipo_SCV.pkl')
+model_SCV = load_model('output/Tipo_SVC.pkl')
 model_XGB = load_model('output/Tipo_XGBoost.pkl')
 
 
@@ -143,8 +143,8 @@ def main():
             model = model_KNN
         elif model_selector == 'Gradient Boost':
             model = model_GB
-        elif model_selector == 'SCV':
-            model = model_SCV
+        elif model_selector == 'SVC':
+            model = model_SVC
         else:
             model = model_XGB
 
