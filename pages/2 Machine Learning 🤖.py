@@ -105,23 +105,36 @@ def main():
         M_Hip_default = (Hpmag_default - 5 *
                          np.log10(d)+5).astype(np.float32)
 
-        # Establecer valores predeterminados para T, M_v y M_Hip y deshabilitar los sliders correspondientes
-        BTmag = st.slider('BTmag', min_value=-0.5,
-                          max_value=15.0, value=float(BTmag_default))
-        VTmag = st.slider('VTmag', min_value=-0.6,
-                          max_value=12.0, value=float(VTmag_default))
-        V_I = st.slider('V-I', min_value=-0.49,
-                        max_value=9.03, value=float(V_I_default))
-        Hpmag = st.slider('Hpmag', min_value=-1.1,
-                          max_value=14.6, value=float(Hpmag_default))
-        V_I_red = st.slider('(V-I)red', min_value=-0.52,
-                            max_value=9.29, value=float(V_I_red_default))
-        T = st.slider('T [K]', min_value=1300.0, max_value=18366.0,
-                      value=float(T_default), key="T")
-        M_v = st.slider('M_v', min_value=-9.0,
-                        max_value=16.0, value=float(M_v_default), key="M_v")
-        M_Hip = st.slider('M_Hip', min_value=-10.0,
-                          max_value=10.0, value=float(M_Hip_default), key="M_Hip")
+        # # Establecer valores predeterminados para T, M_v y M_Hip y deshabilitar los sliders correspondientes
+        # BTmag = st.slider('BTmag', min_value=-0.5,
+        #                   max_value=15.0, value=float(BTmag_default))
+        # VTmag = st.slider('VTmag', min_value=-0.6,
+        #                   max_value=12.0, value=float(VTmag_default))
+        # V_I = st.slider('V-I', min_value=-0.49,
+        #                 max_value=9.03, value=float(V_I_default))
+        # Hpmag = st.slider('Hpmag', min_value=-1.1,
+        #                   max_value=14.6, value=float(Hpmag_default))
+        # V_I_red = st.slider('(V-I)red', min_value=-0.52,
+        #                     max_value=9.29, value=float(V_I_red_default))
+        # T = st.slider('T [K]', min_value=1300.0, max_value=18366.0,
+        #               value=float(T_default), key="T")
+        # M_v = st.slider('M_v', min_value=-9.0,
+        #                 max_value=16.0, value=float(M_v_default))
+        # M_Hip = st.slider('M_Hip', min_value=-10.0,
+        #                   max_value=10.0, value=float(M_Hip_default))
+
+        BTmag = BTmag_default
+        VTmag = VTmag_default
+        V_I = V_I_default
+        Hpmag = Hpmag_default
+        V_I_red = V_I_red_default
+        T = T_default
+        M_v = M_v_default
+        M_Hip = M_Hip_default
+
+        # Actualizar DataFrame con los nuevos valores
+        X_new = pd.DataFrame([[Vmag, BTmag, VTmag, B_V, V_I, Hpmag, V_I_red, d, T, M_v, M_Hip]],
+                             columns=['Vmag', 'BTmag', 'VTmag', 'B-V', 'V-I', 'Hpmag', '(V-I)red', 'd', 'T', 'M_v', 'M_Hip'])
 
         # Actualizar DataFrame con los nuevos valores
         X_new = pd.DataFrame([[Vmag, BTmag, VTmag, B_V, V_I, Hpmag, V_I_red, d, T, M_v, M_Hip]],
