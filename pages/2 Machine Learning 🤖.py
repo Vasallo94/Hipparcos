@@ -33,7 +33,7 @@ def load_model(model_name):
 model_LR = load_model('output/Tipo_GradientBoost.pkl')
 model_KNN = load_model('output/Tipo_KNN.pkl')
 model_GB = load_model('output/Tipo_GradientBoost.pkl')
-model_SCV = load_model('output/Tipo_SVC.pkl')
+model_SVC = load_model('output/Tipo_SVC.pkl')
 model_XGB = load_model('output/Tipo_XGBoost.pkl')
 
 
