@@ -31,9 +31,9 @@ def load_model(model_name):
 
 # Carga los cinco modelos
 model_LR = load_model('output/Tipo_GradientBoost.pkl')
-model_RF = load_model('output/Tipo_RandomForest.pkl')
 model_KNN = load_model('output/Tipo_KNN.pkl')
 model_GB = load_model('output/Tipo_GradientBoost.pkl')
+model_SCV = load_model('output/Tipo_SCV.pkl')
 model_XGB = load_model('output/Tipo_XGBoost.pkl')
 
 
@@ -143,6 +143,8 @@ def main():
             model = model_KNN
         elif model_selector == 'Gradient Boost':
             model = model_GB
+        elif model_selector == 'SCV':
+            model = model_SCV
         else:
             model = model_XGB
 
