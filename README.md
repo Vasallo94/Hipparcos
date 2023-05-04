@@ -1,3 +1,12 @@
+- [Análisis del catálogo astronómico Hipparcos](#análisis-del-catálogo-astronómico-hipparcos)
+  - [Estructura del proyecto](#estructura-del-proyecto)
+  - [Análisis de datos](#análisis-de-datos)
+  - [App de Streamlit](#app-de-streamlit)
+  - [Cómo ejecutar el código](#cómo-ejecutar-el-código)
+  - [TO-DO](#to-do)
+  - [Contribuciones](#contribuciones)
+
+
 # Análisis del catálogo astronómico Hipparcos
 Este es un proyecto que busca analizar el catálogo astronómico Hipparcos, que contiene información detallada sobre las estrellas de nuestra galaxia. El objetivo es utilizar técnicas de análisis de datos para extraer información útil sobre la distribución y características de las estrellas en nuestra galaxia.
 
