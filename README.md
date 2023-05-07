@@ -12,6 +12,8 @@ Este es un proyecto que busca analizar el catálogo astronómico Hipparcos, que 
 
 ![Diagrama Hertzsprung-Russell](img/HR.png)
 
+Si quieres ver la presentación de los datos pincha [aquí](https://www.linkedin.com/posts/enrique-vasallo_data-science-github-activity-7060328901415190528-NmH8?utm_source=share&utm_medium=member_desktop)
+
 ## Estructura del proyecto
 El proyecto está organizado de la siguiente manera:
 
