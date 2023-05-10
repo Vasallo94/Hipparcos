@@ -61,7 +61,7 @@ def create_mov_propio_fig(df):
         xaxis_range=[-180, 180],
         yaxis_range=[-180, 180],
         coloraxis_colorbar=dict(
-            title="distance [pc]"
+            title="Distancia [pc]"
         ),    template="plotly_dark",
         height=400,
         width=800
