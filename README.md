@@ -10,7 +10,7 @@
 # Análisis del catálogo astronómico Hipparcos
 Este es un proyecto que busca analizar el catálogo astronómico Hipparcos, que contiene información detallada sobre las estrellas de nuestra galaxia. El objetivo es utilizar técnicas de análisis de datos para extraer información útil sobre la distribución y características de las estrellas en nuestra galaxia.
 
-![Diagrama Hertzsprung-Russell](img/HR.png)
+![Diagrama Hertzsprung-Russell](img/HRcolores.png)
 
 Si quieres ver la presentación de los datos pincha [aquí](https://www.linkedin.com/posts/enrique-vasallo_data-science-github-activity-7060328901415190528-NmH8?utm_source=share&utm_medium=member_desktop)
 
