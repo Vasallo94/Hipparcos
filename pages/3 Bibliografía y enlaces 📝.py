@@ -28,7 +28,14 @@ def main():
     st.write(
         """ <style>h1, h2, h3, h4, h5, h6 { font-family: 'roman'; } </style>""", unsafe_allow_html=True)
 
-    st.markdown("# Vacío por el momento")
+    st.markdown("# Bibliografía y enlaces")
+    st.markdown(
+        "Los datos son de Kaggle y se pueden consultar [aquí](https://www.kaggle.com/datasets/konivat/hipparcos-star-catalog)")
+    st.markdown(
+        'El archivo lottie se puede ver [aquí](https://lottiefiles.com/89151-stars)')
+    st.markdown(
+        'Apuntes de las asignaturas de __Astrofísica__ y __Astrofísica estelar__ de la Universidad Complutense de Madrid')
+    st.markdown('Kippenhahn, R., Weigert, A., & Weiss, A. (1990). Stellar structure and evolution (Vol. 192). Berlin: Springer-verlag.')
 
 
 if __name__ == '__main__':
